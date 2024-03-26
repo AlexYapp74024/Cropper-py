@@ -16,18 +16,18 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
-    QGraphicsView, QGridLayout, QGroupBox, QHBoxLayout,
-    QLabel, QMainWindow, QMenu, QMenuBar,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
+    QFrame, QGraphicsView, QGridLayout, QGroupBox,
+    QHBoxLayout, QLabel, QMainWindow, QMenu,
+    QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QStatusBar, QVBoxLayout, QWidget)
 import Icons_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(895, 600)
+        MainWindow.resize(886, 584)
         self.actionOpen = QAction(MainWindow)
         self.actionOpen.setObjectName(u"actionOpen")
         self.actionSave = QAction(MainWindow)
@@ -257,11 +257,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_5 = QVBoxLayout(self.groupBox)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.spinBox = QSpinBox(self.groupBox)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimumSize(QSize(0, 0))
+        self.sb_x = QSpinBox(self.groupBox)
+        self.sb_x.setObjectName(u"sb_x")
+        self.sb_x.setMinimumSize(QSize(0, 0))
 
-        self.verticalLayout_5.addWidget(self.spinBox)
+        self.verticalLayout_5.addWidget(self.sb_x)
 
 
         self.verticalLayout_4.addWidget(self.groupBox)
@@ -271,11 +271,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_6 = QVBoxLayout(self.groupBox_2)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(0, -1, 0, -1)
-        self.spinBox_2 = QSpinBox(self.groupBox_2)
-        self.spinBox_2.setObjectName(u"spinBox_2")
-        self.spinBox_2.setMinimumSize(QSize(0, 0))
+        self.sb_y = QSpinBox(self.groupBox_2)
+        self.sb_y.setObjectName(u"sb_y")
+        self.sb_y.setMinimumSize(QSize(0, 0))
 
-        self.verticalLayout_6.addWidget(self.spinBox_2)
+        self.verticalLayout_6.addWidget(self.sb_y)
 
 
         self.verticalLayout_4.addWidget(self.groupBox_2)
@@ -285,11 +285,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14 = QHBoxLayout(self.groupBox_3)
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
         self.horizontalLayout_14.setContentsMargins(0, -1, 0, -1)
-        self.spinBox_3 = QSpinBox(self.groupBox_3)
-        self.spinBox_3.setObjectName(u"spinBox_3")
-        self.spinBox_3.setMinimumSize(QSize(0, 0))
+        self.sb_s = QDoubleSpinBox(self.groupBox_3)
+        self.sb_s.setObjectName(u"sb_s")
+        self.sb_s.setMinimumSize(QSize(0, 0))
+        self.sb_s.setSingleStep(0.010000000000000)
 
-        self.horizontalLayout_14.addWidget(self.spinBox_3)
+        self.horizontalLayout_14.addWidget(self.sb_s)
 
 
         self.verticalLayout_4.addWidget(self.groupBox_3)
@@ -353,10 +354,41 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_13.addWidget(self.line_2)
 
-        self.gv_image = QGraphicsView(self.frame_3)
+        self.groupBox_gv = QGroupBox(self.frame_3)
+        self.groupBox_gv.setObjectName(u"groupBox_gv")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(1)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.groupBox_gv.sizePolicy().hasHeightForWidth())
+        self.groupBox_gv.setSizePolicy(sizePolicy1)
+        self.groupBox_gv.setLayoutDirection(Qt.RightToLeft)
+        self.groupBox_gv.setAlignment(Qt.AlignCenter)
+        self.groupBox_gv.setFlat(True)
+        self.gridLayout_3 = QGridLayout(self.groupBox_gv)
+        self.gridLayout_3.setSpacing(0)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.gv_image = QGraphicsView(self.groupBox_gv)
         self.gv_image.setObjectName(u"gv_image")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy2.setHorizontalStretch(1)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.gv_image.sizePolicy().hasHeightForWidth())
+        self.gv_image.setSizePolicy(sizePolicy2)
+        self.gv_image.setMinimumSize(QSize(0, 0))
+        self.gv_image.setMouseTracking(True)
+        self.gv_image.setFrameShape(QFrame.NoFrame)
+        self.gv_image.setFrameShadow(QFrame.Plain)
+        self.gv_image.setLineWidth(0)
+        self.gv_image.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.gv_image.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.gv_image.setCacheMode(QGraphicsView.CacheBackground)
+        self.gv_image.setResizeAnchor(QGraphicsView.AnchorViewCenter)
 
-        self.horizontalLayout_13.addWidget(self.gv_image)
+        self.gridLayout_3.addWidget(self.gv_image, 0, 0, 1, 1)
+
+
+        self.horizontalLayout_13.addWidget(self.groupBox_gv)
 
 
         self.verticalLayout_3.addWidget(self.frame_3)
@@ -367,7 +399,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 895, 22))
+        self.menubar.setGeometry(QRect(0, 0, 886, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuEdit = QMenu(self.menubar)
