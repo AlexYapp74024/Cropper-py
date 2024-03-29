@@ -20,6 +20,25 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         self.aspect_ratio = 1920.0/1080
         self.gv_image.setScene(self.scene)
 
+        # assign controls
+        self.sb_x.valueChanged.connect(self.sb_x_change)
+        self.sb_y.valueChanged.connect(self.sb_y_change)
+        self.sb_s.valueChanged.connect(self.sb_s_change)
+
+    def sb_x_change(self, a): 
+        self.image.x = a
+        self.update_image()
+
+    def sb_y_change(self, a): 
+        self.image.y = a
+        self.update_image()
+
+    def sb_s_change(self, a): 
+        self.image.scale = a
+        self.update_image()
+
+    # def sb_x_change(self, a): self.image.x = a
+
     @staticmethod
     @njit
     def _calc_rect(fw:int, fh:int, aspect_ratio:float) -> tuple[int,int]:
@@ -46,9 +65,14 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         self.update_image()
 
     def update_image(self) -> None:
-        pix = self.image.cropped_pixmap()
+        self.gv_image
+        w , _ = self.groupBox_gv.size().toTuple()
+        pix = self.image.scaled_to_window_size(w)
         self.scene.addPixmap(pix)
     
     def open_img(self, img_path: str) -> None:
         self.image = Image(img_path)
+        w, h = self.image.calc_movement_margin()
+        self.sb_x.setMaximum(w)
+        self.sb_y.setMaximum(h)
 

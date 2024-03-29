@@ -288,7 +288,9 @@ class Ui_MainWindow(object):
         self.sb_s = QDoubleSpinBox(self.groupBox_3)
         self.sb_s.setObjectName(u"sb_s")
         self.sb_s.setMinimumSize(QSize(0, 0))
+        self.sb_s.setMinimum(1.000000000000000)
         self.sb_s.setSingleStep(0.010000000000000)
+        self.sb_s.setValue(1.000000000000000)
 
         self.horizontalLayout_14.addWidget(self.sb_s)
 
