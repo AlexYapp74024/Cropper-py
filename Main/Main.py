@@ -6,7 +6,7 @@ from PySide6 import (
 )
 from Main.UI.Main_ui import Ui_MainWindow
 from Image import Image
-from numba import jit, njit
+from numba import njit
 
 class MainApp(qtw.QMainWindow, Ui_MainWindow):
     image:Image = None
@@ -25,6 +25,12 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         self.sb_y.valueChanged.connect(self.sb_y_change)
         self.sb_s.valueChanged.connect(self.sb_s_change)
 
+        self.actionSave.triggered.connect(self.save)
+        self.pb_save.clicked.connect(self.save)
+
+    def save(self):
+        self.image.save()
+
     def sb_x_change(self, a): 
         self.image.x = a
         self.update_image()
@@ -35,6 +41,7 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
 
     def sb_s_change(self, a): 
         self.image.scale = a
+        self.set_spinner_bounds()
         self.update_image()
 
     # def sb_x_change(self, a): self.image.x = a
@@ -72,6 +79,9 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
     
     def open_img(self, img_path: str) -> None:
         self.image = Image(img_path)
+        self.set_spinner_bounds()
+    
+    def set_spinner_bounds(self):
         w, h = self.image.calc_movement_margin()
         self.sb_x.setMaximum(w)
         self.sb_y.setMaximum(h)
