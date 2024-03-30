@@ -11,6 +11,10 @@ from Image import Image
 from ImageManager import ImageManager
 from ImageCanvas import ImageCanvas
 from numba import njit
+from settings import settings
+
+import pprint
+import os
 
 class MainApp(qtw.QMainWindow, Ui_MainWindow):
     def __init__(self) -> None:
@@ -21,8 +25,12 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
         self.aspect_ratio = 1920.0/1080
-        
+
+        self.cb_dimension.addItem("600 x 800")
         self.reset_scene()
+
+        self.cb_useDefaultSavePath.setText("Save Path:" + settings["default_save_path"])
+        self.pb_delete_ori.setChecked(settings["delete_original_image"])
 
         # assign controls
         self.sb_x.valueChanged.connect(self.sb_x_change)
@@ -53,6 +61,11 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         self.pb_flip_vertical.clicked.connect(self.flip_vertical)
         self.actionFlip_Vertical.triggered.connect(self.flip_vertical)
 
+        self.cb_dimension.currentTextChanged.connect(self.dim_change)
+
+        self.pb_change_path.clicked.connect(self.change_save_path)  
+        self.pb_delete_ori.clicked.connect(self.toggle_delete_ori)
+
     def _use_image(update=True):
         def func(foo, ):
             @wraps(foo)
@@ -70,6 +83,33 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
     def image(self) -> Image:
         return self.images.current
 
+    def toggle_delete_ori(self, _):
+        settings["delete_original_image"] = self.pb_delete_ori.isChecked()
+        self.save_settings()
+
+    def change_save_path(self, _):
+        file_name = qtw.QFileDialog()
+        file_name.setFileMode(qtw.QFileDialog.FileMode.Directory)
+        name = file_name.getExistingDirectory(self, "Select Directory")
+        
+        if name != '' : 
+            settings["default_save_path"] = name
+            self.save_settings()
+
+    def save_settings(self):
+        with open("settings.py", 'w') as f:
+            out = pprint.pformat(settings, indent=4)
+            f.write(f"settings = {out}")
+
+    def dim_change(self, value:str) -> None:
+        w,h = value.split(' x ')
+        self.aspect_ratio = int(w)/int(h)
+
+        # force a resize, to update layouts
+        self.resize(self.size()*1.0001)
+
+        if self.image is not None: 
+            self.update_image()
 
     @_use_image()
     def flip_horizontal(self) -> None:
@@ -90,13 +130,6 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         self.set_spinner_bounds()
 
     @_use_image()
-    def discard(self):
-        self.images.discard()
-        if self.image is None:
-            self.reset_scene()
-        self.set_spinner_bounds()
-
-    @_use_image()
     def prev(self):
         self.images.prev()
         self.set_spinner_bounds()
@@ -110,16 +143,34 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
         file_name = qtw.QFileDialog()
         file_name.setFileMode(qtw.QFileDialog.FileMode.ExistingFiles)
         filter = "Image Files (*.png;, *.jpg; *.jpeg; *.jpe; *.jfif; *.exif;, *.bmp; *.dib; *.rle;, *.tiff *.tif;, *.gif;, *.tga;,*.dds;);"
-        names , _ = file_name.getOpenFileNames(self,"Open Images", "", filter)
+        names , _ = file_name.getOpenFileNames(
+            self,"Open Images", 
+            settings["default_open_path"], 
+            filter)
+        
         if names == []: return
-
+        settings["default_open_path"] = os.path.dirname(names[0])
+        
         self.images.open(names)
+        self.save_settings()
         self.update_image()
         self.set_spinner_bounds()
 
     @_use_image()
+    def discard(self):
+        if self.pb_delete_ori.isChecked():
+            os.remove(self.image.path)
+        self.images.discard()
+
+        if self.image is None:
+            self.reset_scene()
+        self.set_spinner_bounds()
+
+    @_use_image()
     def save(self):
-        self.image.save()
+        path = f"{settings['default_save_path']}/{os.path.basename(self.image.path)}"
+        self.image.save(path)
+        self.discard()
 
     @_use_image()
     def sb_x_change(self, a):

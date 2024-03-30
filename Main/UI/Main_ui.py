@@ -192,24 +192,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout_11.setSpacing(2)
         self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
         self.horizontalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.label_4 = QLabel(self.frame_8)
-        self.label_4.setObjectName(u"label_4")
+        self.pb_change_path = QPushButton(self.frame_8)
+        self.pb_change_path.setObjectName(u"pb_change_path")
+        self.pb_change_path.setCheckable(False)
+        self.pb_change_path.setChecked(False)
 
-        self.horizontalLayout_11.addWidget(self.label_4)
+        self.horizontalLayout_11.addWidget(self.pb_change_path)
 
-        self.pushButton_7 = QPushButton(self.frame_8)
-        self.pushButton_7.setObjectName(u"pushButton_7")
-        self.pushButton_7.setCheckable(False)
-        self.pushButton_7.setChecked(False)
+        self.pb_delete_ori = QPushButton(self.frame_8)
+        self.pb_delete_ori.setObjectName(u"pb_delete_ori")
+        self.pb_delete_ori.setCheckable(True)
+        self.pb_delete_ori.setChecked(False)
 
-        self.horizontalLayout_11.addWidget(self.pushButton_7)
-
-        self.pushButton_6 = QPushButton(self.frame_8)
-        self.pushButton_6.setObjectName(u"pushButton_6")
-        self.pushButton_6.setCheckable(True)
-        self.pushButton_6.setChecked(False)
-
-        self.horizontalLayout_11.addWidget(self.pushButton_6)
+        self.horizontalLayout_11.addWidget(self.pb_delete_ori)
 
 
         self.horizontalLayout_5.addWidget(self.frame_8)
@@ -477,9 +472,8 @@ class Ui_MainWindow(object):
         self.pb_prev.setText("")
         self.pb_next.setText("")
         self.cb_useDefaultSavePath.setText(QCoreApplication.translate("MainWindow", u"Use Default Save Path", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Save Path", None))
-        self.pushButton_7.setText(QCoreApplication.translate("MainWindow", u"Change", None))
-        self.pushButton_6.setText(QCoreApplication.translate("MainWindow", u"Delete Original", None))
+        self.pb_change_path.setText(QCoreApplication.translate("MainWindow", u"Change", None))
+        self.pb_delete_ori.setText(QCoreApplication.translate("MainWindow", u"Delete Original", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"X Position", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("MainWindow", u"Y Position", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("MainWindow", u"Image Scale", None))

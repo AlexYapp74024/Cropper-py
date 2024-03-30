@@ -21,7 +21,7 @@ class ImageCanvas(qtw.QGraphicsScene):
         return self.images.current
     
     def mousePressEvent(self, event: qtw.QGraphicsSceneMouseEvent) -> None:
-        if event.button() == qtc.Qt.MouseButton.LeftButton:
+        if event.button() == qtc.Qt.MouseButton.LeftButton and self.image is not None:
             self.mouse_down = True
             self.down_pos = event.scenePos()
             self.img_pos  = qtc.QPointF(self.image.x, self.image.y)

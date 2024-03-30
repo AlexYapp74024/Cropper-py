@@ -18,7 +18,6 @@ class Image():
         self.y_max : int = 0
 
         self._aspect_ratio = aspect_ratio
-        self.calc_bounds()
 
     @property
     def ori_pixmap(self) -> qtg.QPixmap:
@@ -37,6 +36,11 @@ class Image():
             return 1 / self._aspect_ratio
         else:
             return self._aspect_ratio
+        
+    @aspect_ratio.setter
+    def aspect_ratio(self, value) -> float:
+        self._aspect_ratio = value
+        self.calc_bounds()
 
     @property
     def w(self):
@@ -57,7 +61,6 @@ class Image():
     @property
     def scale(self): return self._scale
     
-
     def bounds_check(self) -> None:
         if self._x < 0: self._x = 0
         if self._x > self.x_max: self._x = self.x_max
@@ -83,24 +86,6 @@ class Image():
 
     def img_size(self) -> qtc.QSize:
         return self.ori_pixmap.size()
-    
-    def pixmap(self) -> qtg.QPixmap:
-        iw, ih = self.ori_pixmap.size().toTuple()
-        if iw > ih * self.aspect_ratio:
-            pixmap = self.ori_pixmap.copy(
-                int(self._x),
-                int(self._y),
-                self.h / self._scale * self.aspect_ratio,
-                self.h / self._scale
-            )
-        else:  
-            pixmap = self.ori_pixmap.copy(
-                int(self._x),
-                int(self._y),
-                self.w / self._scale,
-                self.w / self._scale / self.aspect_ratio
-            )
-        return pixmap
 
     def flip_horizontal(self) -> None:
         self.ori_pixmap = self.ori_pixmap.transformed(
@@ -134,7 +119,21 @@ class Image():
         if name is None:
             name = self.path
 
-        return self.pixmap().save(name,'png')
+        iw, ih = self.ori_pixmap.size().toTuple()
+        if iw > ih * self.aspect_ratio:
+            return self.ori_pixmap.copy(
+                int(self._x),
+                int(self._y),
+                self.h / self._scale * self.aspect_ratio,
+                self.h / self._scale
+            ).save(name,'png')
+        else:  
+            return self.ori_pixmap.copy(
+                int(self._x),
+                int(self._y),
+                self.w / self._scale,
+                self.w / self._scale / self.aspect_ratio
+            ).save(name,'png')
 
     def calc_bounds(self):
         size = self.ori_pixmap.size()
@@ -154,21 +153,28 @@ class Image():
         self.bounds_check()
 
     def scaled_to_window_size(self, width, height) -> qtg.QPixmap:
-        pixmap = self.pixmap()
-        iw, ih = self.ori_pixmap.size().toTuple()
+        iw, ih = self.ori_pixmap.size().toTuple() 
 
         if iw > ih * self.aspect_ratio:
-            pixmap = pixmap.scaledToHeight(
+            return self.ori_pixmap.copy(
+                int(self._x),
+                int(self._y),
+                self.h / self._scale * self.aspect_ratio,
+                self.h / self._scale
+            ).scaledToHeight(
                 height,
                 qtc.Qt.TransformationMode.SmoothTransformation
             )
         else:
-            pixmap = pixmap.scaledToWidth(
+            return self.ori_pixmap.copy(
+                int(self._x),
+                int(self._y),
+                self.w / self._scale,
+                self.w / self._scale / self.aspect_ratio
+            ).scaledToWidth(
                 width,
                 qtc.Qt.TransformationMode.SmoothTransformation
             )
-
-        return pixmap
     
 
     

@@ -4,10 +4,10 @@ class ImageManager():
     def __init__(self) -> None:
         self.current_idx = 0
         self.images : list[Image] = []
+        self.aspect_ratio = 1920/1080
 
     def open(self, paths = list[str]) -> None:
         opened = [i.path for i in self.images]
-
         self.images += [Image(p) for p in paths if p not in opened]
 
     @property

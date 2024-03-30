@@ -9,6 +9,7 @@ from Main.Main import MainApp
 
 if __name__ == "__main__":
     app = qtw.QApplication()
+    app.setStyle("Fusion")
     window = MainApp()
     window.show()
     # Just to force trigger the resize event to resize graphics view

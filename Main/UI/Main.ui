@@ -331,14 +331,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Save Path</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_7">
+              <widget class="QPushButton" name="pb_change_path">
                <property name="text">
                 <string>Change</string>
                </property>
@@ -351,7 +344,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_6">
+              <widget class="QPushButton" name="pb_delete_ori">
                <property name="text">
                 <string>Delete Original</string>
                </property>
