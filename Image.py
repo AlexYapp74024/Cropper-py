@@ -69,15 +69,15 @@ class Image():
 
     @x.setter
     def x(self, value):
+        if value < 0: value = 0
+        if value > self.x_max: value = self.x_max
         self._x = value
-        if self._x < 0: self._x = 0
-        if self._x > self.x_max: self._x = self.x_max
 
     @y.setter
     def y(self, value):
+        if value < 0: value = 0
+        if value > self.y_max: value = self.y_max
         self._y = value
-        if self._y < 0: self._y = 0
-        if self._y > self.y_max: self._y = self.y_max
 
     @scale.setter
     def scale(self, value): 

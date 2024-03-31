@@ -219,12 +219,13 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
 
         self.scene.update_image = update_callback
         self.gv_image.setScene(self.scene)
+        self.pixmap = self.scene.addPixmap(qtg.QPixmap())
 
     @_use_image(update=False)
     def update_image(self) -> None:
         w , h = self.gv_image.size().toTuple()
         pix = self.image.scaled_to_window_size(w, h)
-        self.scene.addPixmap(pix)
+        self.pixmap.setPixmap(pix)
     
     @_use_image()
     def set_spinner_bounds(self):
