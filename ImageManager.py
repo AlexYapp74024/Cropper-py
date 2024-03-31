@@ -40,18 +40,12 @@ class ImageManager():
 
     def save(self, path:str = None):
         pix = self.current.cropped()
-
-        def _save():
-            byte:bytes = pix.toImage().constBits().tobytes()
-            w,h = pix.size().toTuple()
-            arr = np.frombuffer(byte, np.uint8)
-            arr = arr.reshape(h,w,4)
-            cv2.imwrite(path, arr)
-
-        self.discard()
-
-        worker = Worker(_save)
-        self.threadpool.start(worker)
+        byte:bytes = pix.toImage().constBits().tobytes()
+        w,h = pix.size().toTuple()
+        arr = np.frombuffer(byte, np.uint8)
+        arr = arr.reshape(h,w,4)
+        cv2.imwrite(path, arr)
+        del pix
 
     def discard(self):
         del self.images[self.current_idx]

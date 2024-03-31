@@ -19,7 +19,25 @@ class ImageCanvas(qtw.QGraphicsScene):
     @property
     def image(self) -> Image:
         return self.images.current
-    
+
+    def wheelEvent(self, event: qtw.QGraphicsSceneWheelEvent) -> None:
+        if event.modifiers() != qtc.Qt.KeyboardModifier.ControlModifier : return
+        if self.image is None: return
+
+        s0 = self.image.scale
+        self.image.scale += event.delta() / 120 * 0.01
+        s1 = self.image.scale
+        c = event.scenePos()
+
+        p0 = qtc.QPointF(self.image.x, self.image.y)
+        p1 = s0/s1*(p0 - c) + c
+        
+        x1, y1 = p1.toTuple()
+        self.image.x = x1
+        self.image.y = y1
+
+        self.update_image()
+
     def mousePressEvent(self, event: qtw.QGraphicsSceneMouseEvent) -> None:
         if event.button() == qtc.Qt.MouseButton.LeftButton and self.image is not None:
             self.mouse_down = True

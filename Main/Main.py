@@ -170,13 +170,7 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
     def save(self):
         path = f"{settings['default_save_path']}/{os.path.basename(self.image.path)}"
         self.images.save(path)
-
-        if self.pb_delete_ori.isChecked():
-            os.remove(self.image.path)
-
-        if self.image is None:
-            self.reset_scene()
-        self.set_spinner_bounds()
+        self.discard()
 
     @_use_image()
     def sb_x_change(self, a):
@@ -222,6 +216,7 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
             self.update_image()
             self.sb_x.setValue(self.image.x)
             self.sb_y.setValue(self.image.y)
+            self.sb_s.setValue(self.image.scale)
 
         self.scene.update_image = update_callback
         self.gv_image.setScene(self.scene)

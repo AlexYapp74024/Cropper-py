@@ -32,25 +32,12 @@ class Image():
 
     @property
     def aspect_ratio(self) -> float:
-        if (self.angle % 2):
-            return 1 / self._aspect_ratio
-        else:
-            return self._aspect_ratio
+        return self._aspect_ratio
         
     @aspect_ratio.setter
     def aspect_ratio(self, value) -> float:
         self._aspect_ratio = value
         self.calc_bounds()
-
-    @property
-    def w(self):
-        self.ori_pixmap
-        return self._w
-    
-    @property
-    def h(self):
-        self.ori_pixmap
-        return self._h
 
     @property
     def x(self): return self._x
@@ -82,6 +69,8 @@ class Image():
     @scale.setter
     def scale(self, value): 
         self._scale = value
+        if self._scale < 1.0: 
+            self._scale = 1.0
         self.calc_bounds()
 
     def img_size(self) -> qtc.QSize:
@@ -103,10 +92,11 @@ class Image():
 
     def rotate_90(self) -> None:
         self.ori_pixmap = self.ori_pixmap.transformed(
-            qtg.QTransform().rotate(-90), 
+            qtg.QTransform().rotate(90), 
             qtc.Qt.TransformationMode.SmoothTransformation
         )
         self.calc_bounds()
+        self.angle += 1
 
     def rotate_270(self) -> None:
         self.ori_pixmap = self.ori_pixmap.transformed(
@@ -114,6 +104,7 @@ class Image():
             qtc.Qt.TransformationMode.SmoothTransformation
         )
         self.calc_bounds()
+        self.angle -= 1
 
     def cropped(self) -> qtg.QPixmap:
         iw, ih = self.ori_pixmap.size().toTuple()
@@ -121,22 +112,22 @@ class Image():
             return self.ori_pixmap.copy(
                 int(self._x),
                 int(self._y),
-                self.h / self._scale * self.aspect_ratio,
-                self.h / self._scale
+                ih / self._scale * self.aspect_ratio,
+                ih / self._scale
             )
         else:  
             return self.ori_pixmap.copy(
                 int(self._x),
                 int(self._y),
-                self.w / self._scale,
-                self.w / self._scale / self.aspect_ratio
+                iw / self._scale,
+                iw / self._scale / self.aspect_ratio
             )
 
     def calc_bounds(self):
         size = self.ori_pixmap.size()
         iw, ih = size.toTuple()
         sw, sh = (size / self._scale).toTuple()
-        ar = self.aspect_ratio
+        ar = self._aspect_ratio
 
         if iw > ih * ar:
             h = ih - sh
@@ -152,12 +143,12 @@ class Image():
     def scaled_to_window_size(self, width, height) -> qtg.QPixmap:
         iw, ih = self.ori_pixmap.size().toTuple() 
 
-        if iw > ih * self.aspect_ratio:
+        if iw > ih * self._aspect_ratio:
             return self.ori_pixmap.copy(
                 int(self._x),
                 int(self._y),
-                self.h / self._scale * self.aspect_ratio,
-                self.h / self._scale
+                ih / self._scale * self._aspect_ratio,
+                ih / self._scale,
             ).scaledToHeight(
                 height,
                 qtc.Qt.TransformationMode.SmoothTransformation
@@ -166,8 +157,8 @@ class Image():
             return self.ori_pixmap.copy(
                 int(self._x),
                 int(self._y),
-                self.w / self._scale,
-                self.w / self._scale / self.aspect_ratio
+                iw / self._scale,
+                iw / self._scale / self._aspect_ratio
             ).scaledToWidth(
                 width,
                 qtc.Qt.TransformationMode.SmoothTransformation
