@@ -115,10 +115,7 @@ class Image():
         )
         self.calc_bounds()
 
-    def save(self, name:str = None) -> bool:
-        if name is None:
-            name = self.path
-
+    def cropped(self) -> qtg.QPixmap:
         iw, ih = self.ori_pixmap.size().toTuple()
         if iw > ih * self.aspect_ratio:
             return self.ori_pixmap.copy(
@@ -126,14 +123,14 @@ class Image():
                 int(self._y),
                 self.h / self._scale * self.aspect_ratio,
                 self.h / self._scale
-            ).save(name,'png')
+            )
         else:  
             return self.ori_pixmap.copy(
                 int(self._x),
                 int(self._y),
                 self.w / self._scale,
                 self.w / self._scale / self.aspect_ratio
-            ).save(name,'png')
+            )
 
     def calc_bounds(self):
         size = self.ori_pixmap.size()

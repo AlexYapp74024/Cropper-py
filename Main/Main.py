@@ -169,8 +169,14 @@ class MainApp(qtw.QMainWindow, Ui_MainWindow):
     @_use_image()
     def save(self):
         path = f"{settings['default_save_path']}/{os.path.basename(self.image.path)}"
-        self.image.save(path)
-        self.discard()
+        self.images.save(path)
+
+        if self.pb_delete_ori.isChecked():
+            os.remove(self.image.path)
+
+        if self.image is None:
+            self.reset_scene()
+        self.set_spinner_bounds()
 
     @_use_image()
     def sb_x_change(self, a):

@@ -2,3 +2,6 @@
 .vscode/**
 *.png
 *.jpg
+main.spec
+build/**
+dist/**
